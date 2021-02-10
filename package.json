@@ -7,7 +7,16 @@
     "dotenv": "^8.2.0",
     "snowie-docs": "^1.0.6"
   },
-  "devDependencies": {},
+  "dependencies": {
+    "dotenv": "^8.2.0",
+    "ejs": "^3.1.5",
+    "express": "^4.17.1",
+    "ioredis": "^4.19.3",
+    "uuid": "^8.3.2"
+  },
+  "devDependencies": {
+    "snowie-docs": "^1.0.6"
+  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node server.js"
