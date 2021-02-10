@@ -1,25 +1,23 @@
 {
-  "//1": "describes your app and its dependencies",
-  "//2": "https://docs.npmjs.com/files/package.json",
-  "//3": "updating this file will download and update your packages",
-  "name": "hello-express",
-  "version": "0.0.1",
-  "description": "A simple Node app built on Express, instantly up and running.",
+  "name": "json-crumbs",
+  "version": "1.0.0",
+  "description": "A json database avalible for everyone for free.",
   "main": "server.js",
   "scripts": {
     "start": "node server.js"
   },
   "dependencies": {
-    "express": "^4.17.1",
-    "uuid": "^8.3.2",
+    "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
-    "ioredis": "^4.19.3"
+    "express": "^4.17.1",
+    "ioredis": "^4.19.3",
+    "uuid": "^8.3.2"
   },
   "engines": {
     "node": "12.x"
   },
   "repository": {
-    "url": "https://glitch.com/edit/#!/hello-express"
+    "url": "https://github.com/imagineeeinc/json-crumbs"
   },
   "license": "MIT",
   "keywords": [

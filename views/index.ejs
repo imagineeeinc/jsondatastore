@@ -8,7 +8,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta name="description" content="A cool thing made with Glitch">
 
-    <title>JSONDataStore</title>
+    <title>JSON Crumbs</title>
 
     <link id="favicon" rel="icon" href="https://cdn.glitch.com/project-avatar/bb5f7e50-05a1-4a31-8ecc-924589ab22e1.png?1612515839152">
     <!-- import the webpage's stylesheet -->
@@ -17,27 +17,36 @@
   </head>
   <body>
     <header>
-      <h1>JSONDataStore</h1>
+      <h1>JSON Crumbs</h1>
       <h6>
         A json database avalible for everyone for free
       </h6>
     </header>
-    Your 1 Hour Database: 
-    <code id="1h"></code>
-    <hr>
-    Your 24 Hour Database: 
-    <code id="24h"></code>
-    <hr>
-    Your 7 Days Database: 
-    <code id="7d"></code>
-    <hr>
-    Your 30 Days Database: 
-    <code id="30d"></code>
+    <section>
+      <!--Your 1 Hour Database: 
+      <code id="1h"></code>
+      <hr>
+      Your 24 Hour Database: 
+      <code id="24h"></code>
+      <hr>-->
+      Your 7 Days Database: 
+      <code id="7d"></code>
+      <hr>
+      Your 30 Days Database: 
+      <code id="30d"></code>
+    </section>
 
     <footer style="text-align: center;">
-      <p><img src="https://imagineeeinc.github.io/icon/user.png" style="width: 35px; border-radius: 75px; border: 1px solid#000080;"></p>
-      <p>©<script>document.write(new Date().getFullYear())</script></p>
-      <a href="https://github.com/imagineeeinc">Imagineee</a>
+      <span>
+        <a href="/docs"></a>
+      </span>
+      <span>
+        <img src="https://imagineeeinc.github.io/icon/user.png" style="width: 35px; border-radius: 75px; border: 1px solid#000080;">
+        <br>
+        ©<script>document.write(new Date().getFullYear())</script>
+        <br>
+        <a href="https://github.com/imagineeeinc">Imagineee</a>
+      </span>
     </footer>
     <script>
       var uuid1h = "<%= uuid1h %>"

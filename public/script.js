@@ -1,5 +1,5 @@
-document.getElementById("1h").innerHTML = "https://" + window.location.hostname + "/api/" + uuid1h
-document.getElementById("24h").innerHTML = "https://" + window.location.hostname + "/api/" + uuid24h
+//document.getElementById("1h").innerHTML = "https://" + window.location.hostname + "/api/" + uuid1h
+//document.getElementById("24h").innerHTML = "https://" + window.location.hostname + "/api/" + uuid24h
 document.getElementById("7d").innerHTML = "https://" + window.location.hostname + "/api/" + uuid7d
 document.getElementById("30d").innerHTML = "https://" + window.location.hostname + "/api/" + uuid30d
 

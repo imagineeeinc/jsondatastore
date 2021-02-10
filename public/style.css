@@ -31,8 +31,17 @@ code {
   color: black;
   overflow-x: scroll;
 }
+a {
+  color: blue;
+}
 footer {
   margin-top: 3em;
   padding-top: 1.5em;
   border-top: 1px solid lightgrey;
+}
+footer > span:not(:first-child) {
+  border-left: 2px solid lightgrey;
+}
+footer > span {
+  padding: 3px;
 }
