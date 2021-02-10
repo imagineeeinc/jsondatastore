@@ -22,5 +22,8 @@
   "license": "MIT",
   "keywords": [
     "json-database"
-  ]
+  ],
+  "devDependencies": {
+    "snowie-docs": "^1.0.6"
+  }
 }

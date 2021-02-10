@@ -5,9 +5,9 @@ const Redis = require("ioredis");
 require('dotenv').config()
 //const crumbs = new Redis();
 const crumbs = new Redis({
-    host: process.env.host,
-    port: process.env.port,
-    password: process.env.password
+    host: process.env.host || "127.0.0.1",
+    port: process.env.port || 6379,
+    password: process.env.password || ""
 });
 crumbs.set("wire", "['wire_set: json-crumbs']"); // returns promise which resolves to string, "OK"
 
