@@ -3,27 +3,26 @@
   "version": "1.0.0",
   "description": "A json database avalible for everyone for free.",
   "main": "server.js",
-  "scripts": {
-    "start": "node server.js"
-  },
   "dependencies": {
     "dotenv": "^8.2.0",
-    "ejs": "^3.1.5",
-    "express": "^4.17.1",
-    "ioredis": "^4.19.3",
-    "uuid": "^8.3.2"
+    "snowie-docs": "^1.0.6"
   },
-  "engines": {
-    "node": "12.x"
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
   },
   "repository": {
-    "url": "https://github.com/imagineeeinc/json-crumbs"
+    "type": "git",
+    "url": "git+https://github.com/imagineeeinc/json-crumbs.git"
   },
-  "license": "MIT",
   "keywords": [
     "json-database"
   ],
-  "devDependencies": {
-    "snowie-docs": "^1.0.6"
-  }
+  "author": "imagineee",
+  "license": "SEE LICENSE IN LICENSE",
+  "bugs": {
+    "url": "https://github.com/imagineeeinc/json-crumbs/issues"
+  },
+  "homepage": "https://github.com/imagineeeinc/json-crumbs#readme"
 }
