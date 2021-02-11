@@ -5,16 +5,12 @@
   "main": "server.js",
   "dependencies": {
     "dotenv": "^8.2.0",
-    "snowie-docs": "^1.0.6"
-  },
-  "dependencies": {
-    "dotenv": "^8.2.0",
     "ejs": "^3.1.5",
     "express": "^4.17.1",
     "ioredis": "^4.19.3",
     "uuid": "^8.3.2"
   },
-  "devDependencies": {
+  "devvim.disableExtentionDependencies": {
     "snowie-docs": "^1.0.6"
   },
   "scripts": {

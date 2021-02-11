@@ -53,7 +53,7 @@ app.get("/api/:uid", (req, res) => {
             res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
             console.log("accsesed: " + req.params.uid)
             if (result._db_time == "7d") {
-              crumbs.expire(result._name, "604800");
+              crumbs.expire(result._name, "6041010");
             } else if (result._db_time == "30d") {
               crumbs.expire(result._name, "2592000");
             } else if (result._db_time == "inf") {
@@ -84,7 +84,7 @@ app.get("/api/:uid/get", (req, res) => {
             res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
             console.log("accsesed: " + req.params.uid)
             if (result._db_time == "7d") {
-              crumbs.expire(result._name, "604800");
+              crumbs.expire(result._name, "6041010");
             } else if (result._db_time == "30d") {
               crumbs.expire(result._name, "2592000");
             } else if (result._db_time == "inf") {
@@ -115,7 +115,7 @@ app.get("/api/:uid/getdbonly", (req, res) => {
             res.json(result._db)
             console.log("accsesed: " + req.params.uid)
             if (result._db_time == "7d") {
-              crumbs.expire(result._name, "604800");
+              crumbs.expire(result._name, "6041010");
             } else if (result._db_time == "30d") {
               crumbs.expire(result._name, "2592000");
             } else if (result._db_time == "inf") {
@@ -148,17 +148,17 @@ app.get("/api/:uid/update", (req, res) => {
             data = JSON.parse("[" + data + "]")
             result._db = data
             result._last_modified = Math.round((new Date()).getTime() / 1000)
-            if (result._db.length < 10000) {
+            if (result._db.length < 1010) {
               crumbs.set(req.params.uid, JSON.stringify(result));
               res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
               console.log("accsesed: " + req.params.uid)
-            } else if(result._db.length > 10000) {
-              console.log(req.params.uid + " db has exeded size limit of 10000")
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 10000"]})
+            } else if(result._db.length > 1010) {
+              console.log(req.params.uid + " db has exeded size limit of 1010")
+              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 1010"]})
             }
             console.log("accsesed: " + req.params.uid)
             if (result._db_time == "7d") {
-              crumbs.expire(result._name, "604800");
+              crumbs.expire(result._name, "6041010");
             } else if (result._db_time == "30d") {
               crumbs.expire(result._name, "2592000");
             } else if (result._db_time == "inf") {
@@ -191,17 +191,17 @@ app.get("/api/:uid/add", (req, res) => {
             data = JSON.parse("{\"data\": " + data + "}")
             result._db.push(data.data)
             result._last_modified = Math.round((new Date()).getTime() / 1000)
-            if (result._db.length < 10000) {
+            if (result._db.length < 1010) {
               crumbs.set(req.params.uid, JSON.stringify(result));
               res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
               console.log("accsesed: " + req.params.uid)
-            } else if(result._db.length > 10000) {
-              console.log(req.params.uid + " db has exeded size limit of 10000")
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 10000"]})
+            } else if(result._db.length > 1010) {
+              console.log(req.params.uid + " db has exeded size limit of 1010")
+              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 1010"]})
             }
             console.log("accsesed: " + req.params.uid)
             if (result._db_time == "7d") {
-              crumbs.expire(result._name, "604800");
+              crumbs.expire(result._name, "6041010");
             } else if (result._db_time == "30d") {
               crumbs.expire(result._name, "2592000");
             } else if (result._db_time == "inf") {
@@ -232,17 +232,17 @@ app.get("/api/:uid/pop", (req, res) => {
             result = JSON.parse(result)
             result._db.pop()
             result._last_modified = Math.round((new Date()).getTime() / 1000)
-            if (result._db.length < 10000) {
+            if (result._db.length < 1010) {
               crumbs.set(req.params.uid, JSON.stringify(result));
               res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
               console.log("accsesed: " + req.params.uid)
-            } else if(result._db.length > 10000) {
-              console.log(req.params.uid + " db has exeded size limit of 10000")
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 10000"]})
+            } else if(result._db.length > 1010) {
+              console.log(req.params.uid + " db has exeded size limit of 1010")
+              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 1010"]})
             }
             console.log("accsesed: " + req.params.uid)
             if (result._db_time == "7d") {
-              crumbs.expire(result._name, "604800");
+              crumbs.expire(result._name, "6041010");
             } else if (result._db_time == "30d") {
               crumbs.expire(result._name, "2592000");
             } else if (result._db_time == "inf") {
@@ -273,17 +273,17 @@ app.get("/api/:uid/deleteall", (req, res) => {
             result = JSON.parse(result)
             result._db = []
             result._last_modified = Math.round((new Date()).getTime() / 1000)
-            if (result._db.length < 10000) {
+            if (result._db.length < 1010) {
               crumbs.set(req.params.uid, JSON.stringify(result));
               res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
               console.log("accsesed: " + req.params.uid)
-            } else if(result._db.length > 10000) {
-              console.log(req.params.uid + " db has exeded size limit of 10000")
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 10000"]})
+            } else if(result._db.length > 1010) {
+              console.log(req.params.uid + " db has exeded size limit of 1010")
+              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 1010"]})
             }
             console.log("accsesed: " + req.params.uid)
             if (result._db_time == "7d") {
-              crumbs.expire(result._name, "604800");
+              crumbs.expire(result._name, "6041010");
             } else if (result._db_time == "30d") {
               crumbs.expire(result._name, "2592000");
             } else if (result._db_time == "inf") {
@@ -317,16 +317,16 @@ app.get("/api/:uid/updateoneonly", (req, res) => {
             data = JSON.parse("{\"data\": " + data + "}")
             result._db[number] = data.data
             result._last_modified = Math.round((new Date()).getTime() / 1000)
-            if (result._db.length < 10000) {
+            if (result._db.length < 1010) {
               crumbs.set(req.params.uid, JSON.stringify(result));
               res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
               console.log("accsesed: " + req.params.uid)
-            } else if(result._db.length > 10000) {
-              console.log(req.params.uid + " db has exeded size limit of 10000")
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 10000"]})
+            } else if(result._db.length > 1010) {
+              console.log(req.params.uid + " db has exeded size limit of 1010")
+              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 1010"]})
             }
             if (result._db_time == "7d") {
-              crumbs.expire(result._name, "604800");
+              crumbs.expire(result._name, "6041010");
             } else if (result._db_time == "30d") {
               crumbs.expire(result._name, "2592000");
             } else if (result._db_time == "inf") {
@@ -404,7 +404,7 @@ function setDb(h1, h24, d7, d30, inf) {
     _db_time: "7d",
     _db: []
   }));
-  crumbs.expire(d7, "604800");
+  crumbs.expire(d7, "6041010");
   //30 days
   crumbs.set(d30, JSON.stringify({
     _name: d30,
