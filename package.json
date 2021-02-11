@@ -10,12 +10,10 @@
     "ioredis": "^4.19.3",
     "uuid": "^8.3.2"
   },
-  "devvim.disableExtentionDependencies": {
-    "snowie-docs": "^1.0.6"
-  },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node server.js"
+    "start": "node server.js",
+    "serve": "node server.js"
   },
   "repository": {
     "type": "git",
