@@ -26,15 +26,13 @@ app.set('view engine', 'ejs')
 
 // https://expressjs.com/en/starter/basic-routing.html
 app.get("/", (req, res) => {
-  var uid1h = genUuid()
-  var uid24h = genUuid()
   var uid7d = genUuid()
   var uid30d = genUuid()
   var uidinf = genUuid()
-  res.render('index', { uuid1h: uid1h, uuid24h: uid24h, uuid7d: uid7d, uuid30d: uid30d, uuidinf: uidinf});
+  res.render('index', {uuid7d: uid7d, uuid30d: uid30d, uuidinf: uidinf});
   //res.redirect("/" + uuidv4())
   //res.sendFile(__dirname + "/views/index.html");
-  setDb(uid1h, uid24h, uid7d, uid30d, uidinf)
+  setDb(uid7d, uid30d, uidinf)
 });
 app.get("/api/:uid", (req, res) => {
   crumbs.exists(req.params.uid, function (err, result) {
@@ -49,15 +47,20 @@ app.get("/api/:uid", (req, res) => {
             console.log(result);
             res.json({_err: err});
           } else {
-            result = JSON.parse(result)
-            res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
-            console.log("accsesed: " + req.params.uid)
-            if (result._db_time == "7d") {
-              crumbs.expire(result._name, "6041010");
-            } else if (result._db_time == "30d") {
-              crumbs.expire(result._name, "2592000");
-            } else if (result._db_time == "inf") {
-              console.log("somone accsed a 'inf' database with a uuid of: " + result._name)
+            try {
+              result = JSON.parse(result)
+              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
+              console.log("accsesed: " + req.params.uid)
+              if (result._db_time == "7d") {
+                crumbs.expire(result._name, "6041010");
+              } else if (result._db_time == "30d") {
+                crumbs.expire(result._name, "2592000");
+              } else if (result._db_time == "inf") {
+                console.log("somone accsed a 'inf' database with a uuid of: " + result._name)
+              }
+            }
+            catch (err) {
+              res.json({_err: err})
             }
           }
         });
@@ -68,6 +71,7 @@ app.get("/api/:uid", (req, res) => {
   });
 });
 app.get("/api/:uid/get", (req, res) => {
+  var key = req.query.key
   crumbs.exists(req.params.uid, function (err, result) {
     if (err) {
       console.error(err);
@@ -80,15 +84,24 @@ app.get("/api/:uid/get", (req, res) => {
             console.log(result);
             res.json({_err: err});
           } else {
+            try {
             result = JSON.parse(result)
-            res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
-            console.log("accsesed: " + req.params.uid)
-            if (result._db_time == "7d") {
-              crumbs.expire(result._name, "6041010");
-            } else if (result._db_time == "30d") {
-              crumbs.expire(result._name, "2592000");
-            } else if (result._db_time == "inf") {
-              console.log("somone accsed a 'inf' database with a uuid of: " + result._name)
+              if (result._db[key]) {
+                res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, [key]: result._db[key]})
+              } else {
+                res.json({err: "no keys exists"})
+              }
+              console.log("accsesed: " + req.params.uid)
+              if (result._db_time == "7d") {
+                crumbs.expire(result._name, "6041010");
+              } else if (result._db_time == "30d") {
+                crumbs.expire(result._name, "2592000");
+              } else if (result._db_time == "inf") {
+                console.log("somone accsed a 'inf' database with a uuid of: " + result._name)
+              }
+            }
+            catch (err) {
+              res.json({_err: err})
             }
           }
         });
@@ -111,15 +124,20 @@ app.get("/api/:uid/getdbonly", (req, res) => {
             console.log(result);
             res.json({_err: err});
           } else {
-            result = JSON.parse(result)
-            res.json(result._db)
-            console.log("accsesed: " + req.params.uid)
-            if (result._db_time == "7d") {
-              crumbs.expire(result._name, "6041010");
-            } else if (result._db_time == "30d") {
-              crumbs.expire(result._name, "2592000");
-            } else if (result._db_time == "inf") {
-              console.log("somone accsed a 'inf' database with a uuid of: " + result._name)
+            try {
+              result = JSON.parse(result)
+              res.json(result._db)
+              console.log("accsesed: " + req.params.uid)
+              if (result._db_time == "7d") {
+                crumbs.expire(result._name, "6041010");
+              } else if (result._db_time == "30d") {
+                crumbs.expire(result._name, "2592000");
+              } else if (result._db_time == "inf") {
+                console.log("somone accsed a 'inf' database with a uuid of: " + result._name)
+              }
+            }
+            catch (err) {
+              res.json({_err: err})
             }
           }
         });
@@ -129,7 +147,8 @@ app.get("/api/:uid/getdbonly", (req, res) => {
     }
   });
 });
-app.get("/api/:uid/update", (req, res) => {
+app.get("/api/:uid/set", (req, res) => {
+  var key = req.query.key
   var data = req.query.data
   crumbs.exists(req.params.uid, function (err, result) {
     if (err) {
@@ -143,110 +162,31 @@ app.get("/api/:uid/update", (req, res) => {
             console.log(result);
             res.json({_err: err});
           } else {
-            //req.query.
-            result = JSON.parse(result)
-            data = JSON.parse("[" + data + "]")
-            result._db = data
-            result._last_modified = Math.round((new Date()).getTime() / 1000)
-            if (result._db.length < 1010) {
-              crumbs.set(req.params.uid, JSON.stringify(result));
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
+            try {
+              result = JSON.parse(result)
+              data = JSON.parse("{\"data\": " + data + "}")
+              result._db[key] = data.data
+              result._last_modified = Math.round((new Date()).getTime() / 1000)
+              var end = JSON.stringify(result)
+              if (end.length < 1010) {
+                crumbs.set(req.params.uid, end);
+                res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, [key]: result._db[key]})
+                console.log("accsesed: " + req.params.uid)
+              } else if(result._db.length > 1010) {
+                console.log(req.params.uid + " db has exeded size limit of 1010")
+                res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 1010"]})
+              }
               console.log("accsesed: " + req.params.uid)
-            } else if(result._db.length > 1010) {
-              console.log(req.params.uid + " db has exeded size limit of 1010")
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 1010"]})
+              if (result._db_time == "7d") {
+                crumbs.expire(result._name, "6041010");
+              } else if (result._db_time == "30d") {
+                crumbs.expire(result._name, "2592000");
+              } else if (result._db_time == "inf") {
+                console.log("somone accsed a 'inf' database with a uuid of: " + result._name)
+              }
             }
-            console.log("accsesed: " + req.params.uid)
-            if (result._db_time == "7d") {
-              crumbs.expire(result._name, "6041010");
-            } else if (result._db_time == "30d") {
-              crumbs.expire(result._name, "2592000");
-            } else if (result._db_time == "inf") {
-              console.log("somone accsed a 'inf' database with a uuid of: " + result._name)
-            }
-          }
-        });
-      } else if (result == 0) {
-        res.json({err: "The DataBase Dosen't Exist"})
-      }
-    }
-  });
-});
-app.get("/api/:uid/add", (req, res) => {
-  var data = req.query.data
-  crumbs.exists(req.params.uid, function (err, result) {
-    if (err) {
-      console.error(err);
-    } else {
-      //console.log(result); // Promise resolves to "bar"
-      if (result == 1) {
-        crumbs.get(req.params.uid, function (err, result) {
-          if (err) {
-            console.error(err);
-            console.log(result);
-            res.json({_err: err});
-          } else {
-            //req.query.
-            result = JSON.parse(result)
-            data = JSON.parse("{\"data\": " + data + "}")
-            result._db.push(data.data)
-            result._last_modified = Math.round((new Date()).getTime() / 1000)
-            if (result._db.length < 1010) {
-              crumbs.set(req.params.uid, JSON.stringify(result));
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
-              console.log("accsesed: " + req.params.uid)
-            } else if(result._db.length > 1010) {
-              console.log(req.params.uid + " db has exeded size limit of 1010")
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 1010"]})
-            }
-            console.log("accsesed: " + req.params.uid)
-            if (result._db_time == "7d") {
-              crumbs.expire(result._name, "6041010");
-            } else if (result._db_time == "30d") {
-              crumbs.expire(result._name, "2592000");
-            } else if (result._db_time == "inf") {
-              console.log("somone accsed a 'inf' database with a uuid of: " + result._name)
-            }
-          }
-        });
-      } else if (result == 0) {
-        res.json({err: "The DataBase Dosen't Exist"})
-      }
-    }
-  });
-});
-app.get("/api/:uid/pop", (req, res) => {
-  crumbs.exists(req.params.uid, function (err, result) {
-    if (err) {
-      console.error(err);
-    } else {
-      //console.log(result); // Promise resolves to "bar"
-      if (result == 1) {
-        crumbs.get(req.params.uid, function (err, result) {
-          if (err) {
-            console.error(err);
-            console.log(result);
-            res.json({_err: err});
-          } else {
-            //req.query.
-            result = JSON.parse(result)
-            result._db.pop()
-            result._last_modified = Math.round((new Date()).getTime() / 1000)
-            if (result._db.length < 1010) {
-              crumbs.set(req.params.uid, JSON.stringify(result));
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
-              console.log("accsesed: " + req.params.uid)
-            } else if(result._db.length > 1010) {
-              console.log(req.params.uid + " db has exeded size limit of 1010")
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 1010"]})
-            }
-            console.log("accsesed: " + req.params.uid)
-            if (result._db_time == "7d") {
-              crumbs.expire(result._name, "6041010");
-            } else if (result._db_time == "30d") {
-              crumbs.expire(result._name, "2592000");
-            } else if (result._db_time == "inf") {
-              console.log("somone accsed a 'inf' database with a uuid of: " + result._name)
+            catch (err) {
+              res.json({_err: err})
             }
           }
         });
@@ -269,68 +209,24 @@ app.get("/api/:uid/deleteall", (req, res) => {
             console.log(result);
             res.json({_err: err});
           } else {
-            //req.query.
-            result = JSON.parse(result)
-            result._db = []
-            result._last_modified = Math.round((new Date()).getTime() / 1000)
-            if (result._db.length < 1010) {
+            try {
+              result = JSON.parse(result)
+              result._db = {}
+              result._last_modified = Math.round((new Date()).getTime() / 1000)
               crumbs.set(req.params.uid, JSON.stringify(result));
               res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
               console.log("accsesed: " + req.params.uid)
-            } else if(result._db.length > 1010) {
-              console.log(req.params.uid + " db has exeded size limit of 1010")
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 1010"]})
-            }
-            console.log("accsesed: " + req.params.uid)
-            if (result._db_time == "7d") {
-              crumbs.expire(result._name, "6041010");
-            } else if (result._db_time == "30d") {
-              crumbs.expire(result._name, "2592000");
-            } else if (result._db_time == "inf") {
-              console.log("somone accsed a 'inf' database with a uuid of: " + result._name)
-            }
-          }
-        });
-      } else if (result == 0) {
-        res.json({err: "The DataBase Dosen't Exist"})
-      }
-    }
-  });
-});
-app.get("/api/:uid/updateoneonly", (req, res) => {
-  var number = parseInt(req.query.location)
-  var data = req.query.data
-  crumbs.exists(req.params.uid, function (err, result) {
-    if (err) {
-      console.error(err);
-    } else {
-      //console.log(result); // Promise resolves to "bar"
-      if (result == 1) {
-        crumbs.get(req.params.uid, function (err, result) {
-          if (err) {
-            console.error(err);
-            console.log(result);
-            res.json({_err: err});
-          } else {
-            //req.query.
-            result = JSON.parse(result)
-            data = JSON.parse("{\"data\": " + data + "}")
-            result._db[number] = data.data
-            result._last_modified = Math.round((new Date()).getTime() / 1000)
-            if (result._db.length < 1010) {
-              crumbs.set(req.params.uid, JSON.stringify(result));
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: result._db})
               console.log("accsesed: " + req.params.uid)
-            } else if(result._db.length > 1010) {
-              console.log(req.params.uid + " db has exeded size limit of 1010")
-              res.json({_last_modified_date: result._last_modified, _db_exp_time: result._db_time, db: ["size limit reached of 1010"]})
+              if (result._db_time == "7d") {
+                crumbs.expire(result._name, "6041010");
+              } else if (result._db_time == "30d") {
+                crumbs.expire(result._name, "2592000");
+              } else if (result._db_time == "inf") {
+                console.log("somone accsed a 'inf' database with a uuid of: " + result._name)
+              }
             }
-            if (result._db_time == "7d") {
-              crumbs.expire(result._name, "6041010");
-            } else if (result._db_time == "30d") {
-              crumbs.expire(result._name, "2592000");
-            } else if (result._db_time == "inf") {
-              console.log("somone accsed a 'inf' database with a uuid of: " + result._name)
+            catch (err) {
+              res.json({_err: err})
             }
           }
         });
@@ -341,12 +237,10 @@ app.get("/api/:uid/updateoneonly", (req, res) => {
   });
 });
 app.get("/getnew", (req, res) => {
-  var uid1h = genUuid()
-  var uid24h = genUuid()
   var uid7d = genUuid()
   var uid30d = genUuid()
   var uidinf = genUuid()
-  setDb(uid1h, uid24h, uid7d, uid30d, uidinf)
+  setDb(uid7d, uid30d, uidinf)
   res.json({d7: uid7d, d30: uid30d})
 });
 
@@ -377,32 +271,14 @@ function genUuid() {
     return genUuid()
   }
 }
-function setDb(h1, h24, d7, d30, inf) {
-  //1 hour
-  /*
-  crumbs.set(h1, JSON.stringify({
-    _creation_date: Math.round((new Date()).getTime() / 1000),
-    _last_modified: Math.round((new Date()).getTime() / 1000),
-    _db_time: "1h",
-    _db: []
-  }));
-  crumbs.expire(h24, "3600");
-  //24 hours
-  crumbs.set(h1, JSON.stringify({
-    _creation_date: Math.round((new Date()).getTime() / 1000),
-    _last_modified: Math.round((new Date()).getTime() / 1000),
-    _db_time: "24h",
-    _db: []
-  }));
-  crumbs.expire(h24, "86400");
-  */
+function setDb(d7, d30, inf) {
   //7 days
   crumbs.set(d7, JSON.stringify({
     _name: d7,
     _creation_date: Math.round((new Date()).getTime() / 1000),
     _last_modified: Math.round((new Date()).getTime() / 1000),
     _db_time: "7d",
-    _db: []
+    _db: {}
   }));
   crumbs.expire(d7, "6041010");
   //30 days
@@ -411,7 +287,7 @@ function setDb(h1, h24, d7, d30, inf) {
     _creation_date: Math.round((new Date()).getTime() / 1000),
     _last_modified: Math.round((new Date()).getTime() / 1000),
     _db_time: "30d",
-    _db: []
+    _db: {}
   }));
   crumbs.expire(d30, "2592000");
   //infinate
@@ -420,6 +296,6 @@ function setDb(h1, h24, d7, d30, inf) {
     _creation_date: Math.round((new Date()).getTime() / 1000),
     _last_modified: Math.round((new Date()).getTime() / 1000),
     _db_time: "inf",
-    _db: []
+    _db: {}
   }));
 }
